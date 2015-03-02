@@ -44,7 +44,7 @@ public class Robot extends IterativeRobot {
 	public static SendableChooser autoChooser, stepOrNah;
 	public static OI oi;
 	
-	public static  ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	public static ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static DriveTrain driveTrain = new DriveTrain();
 	public static FrontElevator frontElevator = new FrontElevator();
 	public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
@@ -64,13 +64,19 @@ public class Robot extends IterativeRobot {
     	invert = 1;
     	clawState = true;
     	button2 = true;
-		oi = new OI();
+		
+    	//OI Must be constructed after subsytems. If the OI creates Commands
+    	//(a likely scenario) subsystems are not guaranteed to be constructed yet.
+    	//This would result in their Requires() call may grab a null pointer.  Bad, dont move it!
+    	oi = new OI();
+    	
         // instantiate the command used for the autonomous period
         drive = new Drive();
         autoChooser = new SendableChooser();
         stepOrNah = new SendableChooser();
         stepOrNah.addDefault("Step", true);
         stepOrNah.addObject("No Step", false);
+        
         
         autoChooser.addDefault("Nothing yet", new Auto());
         autoChooser.addObject("Tote Then Trash", new ToteThenTrash());
@@ -81,8 +87,22 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Chooser", autoChooser);
         SmartDashboard.putData("StepChooser", stepOrNah);
         
+        //Setup the Gryo
+        if(RobotMap.gyro != null)
+        {
+        	//Once initialized, the getAngle() method of the Gyro object will return
+        	//the number of degrees of rotation (heading) as a positive or negative number
+        	//relative to the robot’s position during the calibration period. 
+        	//The zero heading can be reset at any time by calling the reset() method on the Gyro object.
+        	RobotMap.gyro.initGyro();
+        	
+        	//2014 Gyro ADW22307 can measure up to 250°/second of rotation. 
+        	//Nominal output is 2.5V at standstill, plus 7mV/°/second
+        	//Sensitivity = volts/°/sec therefore 7mV/°/sec would be set at 0.007V/°/sec
+        	RobotMap.gryo.setSensitivity(0.007);//0.001655
+        	RobotMap.gryo.reset();
+        }
         
-        RobotMap.gyro.reset();
         RobotMap.driveTrain.drive(0, 0);
     	RobotMap.frontElevator.set(0);
     	RobotMap.backElevator.set(0);
