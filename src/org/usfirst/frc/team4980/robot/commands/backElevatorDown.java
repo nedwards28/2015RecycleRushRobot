@@ -23,7 +23,7 @@ public class backElevatorDown extends Command {
     protected void execute() {
     	double x = Robot.oi.stick.getRawAxis(3);
     	x=x-1;
-    	x=x/(-2);
+    	x=x/(-2);   
     	RobotMap.backElevator.set(-x);
     }
 

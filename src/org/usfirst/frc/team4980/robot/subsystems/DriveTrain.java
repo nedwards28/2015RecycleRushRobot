@@ -20,9 +20,39 @@ public class DriveTrain extends Subsystem {
 	SpeedController rearLeft = RobotMap.rearLeft;
 	SpeedController frontRight = RobotMap.frontRight;
 	SpeedController frontLeft = RobotMap.frontLeft;
-	RobotDrive driveTrain = RobotMap.driveTrain;
+	public RobotDrive driveTrain = RobotMap.driveTrain;
 	
-	
+	public void customMecanumDrive_Polar(double magnitude, double direction, double rotation, double weightFactor) {
+	    // Normalized for full power along the Cartesian axes.
+	    magnitude = limit(magnitude) * Math.sqrt(2.0);
+	    // The rollers are at 45 degree angles.
+	    double dirInRad = (direction + 45.0) * 3.14159 / 180.0;
+	    double cosD = Math.cos(dirInRad);
+	    double sinD = Math.sin(dirInRad);
+	    
+	    int kRearRight = 0;
+	    int kFrontRight = 1;
+	    int kFrontLeft = 2;
+	    int kRearLeft = 3;
+	    
+	    double kSlowRotation = 0.5;
+	    rotation *= kSlowRotation;
+	    
+	    double wheelSpeeds[] = new double[4];
+	    wheelSpeeds[kFrontLeft] = (sinD * magnitude + rotation);
+	    wheelSpeeds[kFrontRight] = (cosD * magnitude - rotation);
+	    wheelSpeeds[kRearLeft] = (cosD * magnitude + rotation);
+	    wheelSpeeds[kRearRight] = (sinD * magnitude - rotation);
+	    
+	    normalize(wheelSpeeds);
+	    byte syncGroup = (byte)0x80;
+
+	    RobotMap.frontLeft.set(wheelSpeeds[kFrontLeft]  * 1, syncGroup);
+	    RobotMap.frontRight.set(wheelSpeeds[kFrontRight] * -1 /*Inverted*/ * 1, syncGroup);
+	    RobotMap.rearLeft.set(wheelSpeeds[kRearLeft]* 1, syncGroup);
+	    RobotMap.rearRight.set(wheelSpeeds[kRearRight] * -1 /*Inverted*/ * 1, syncGroup);
+	    
+	}
 	public void xbox()
 	{
 		double rightTrigger = Robot.oi.stick.getRawAxis(3);
@@ -94,7 +124,9 @@ public class DriveTrain extends Subsystem {
         }
         */
         
-        
+       
+    	twist*=.58;
+        magnitude *= .85;
         
     	RobotMap.driveTrain.mecanumDrive_Polar(magnitude, direction, twist*Robot.invert);
 		
@@ -139,6 +171,32 @@ public class DriveTrain extends Subsystem {
     	driveTrain.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
     	driveTrain.setInvertedMotor(RobotDrive.MotorType.kFrontRight, false);//frontRight
     	driveTrain.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);//rearRight
+    }
+    protected static double limit(double num) 
+    {
+        if (num > 1.0) 
+        {
+            return 1.0;
+        }
+        if (num < -1.0) 
+        {
+            return -1.0;
+        }
+        return num;
+    }
+    protected static void normalize(double wheelSpeeds[]) 
+    {
+        double maxMagnitude = Math.abs(wheelSpeeds[0]);
+        int i;
+        for (i=1; i<4; i++) {
+            double temp = Math.abs(wheelSpeeds[i]);
+            if (maxMagnitude < temp) maxMagnitude = temp;
+        }
+        if (maxMagnitude > 1.0) {
+            for (i=0; i<4; i++) {
+                wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+            }
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package org.usfirst.frc.team4980.robot.subsystems;
 import org.usfirst.frc.team4980.robot.Robot;
 import org.usfirst.frc.team4980.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -14,7 +15,7 @@ public class FrontElevator extends Subsystem {
     
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-
+	public SpeedController frontElevatorMotor = RobotMap.frontElevator;
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());

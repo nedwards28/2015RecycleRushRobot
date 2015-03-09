@@ -25,6 +25,7 @@ public class ContainerOnlyAuto extends Command {
     protected void initialize() {
     	mode = 0;
     	step =(boolean) Robot.stepOrNah.getSelected();
+    	time=Timer.getFPGATimestamp();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -33,62 +34,44 @@ public class ContainerOnlyAuto extends Command {
     	{
     		RobotMap.cylinderOpen.set(false);
     		RobotMap.cylinderClose.set(true);
-    	}
-    	
-    	else if(mode==1)
-    	{//back up over step
     		driveTrain.straight();
-    		time = Timer.getFPGATimestamp();
-    		while(time+.5>Timer.getFPGATimestamp() )
-        	{
-        		RobotMap.driveTrain.drive(.4, 0);//drive in reverse 
-        	}
-    		RobotMap.driveTrain.drive(0, 0);
-		}
-    	else if(mode==2)
+    	}
+    	else if(mode==1)
     	{
     		time = Timer.getFPGATimestamp();
-    		while(time+2>Timer.getFPGATimestamp())
+    		while(time+1>Timer.getFPGATimestamp())
     		{
-    			RobotMap.backElevator.set(.5);
+    			RobotMap.backElevator.set(.8);
     		}
     		RobotMap.backElevator.set(0);
     		
     	}
-    	else if(mode==3 && step==false)
+    	
+    	else if(mode==2 && step==true)
     	{//back up over step
-    		time = Timer.getFPGATimestamp();
-    		while(time+2.65>Timer.getFPGATimestamp())
+    		while(time+1<Timer.getFPGATimestamp() && time+3.3>Timer.getFPGATimestamp())
         	{
-        		RobotMap.driveTrain.drive(.3, 0);//drive in reverse over step
+        		RobotMap.driveTrain.drive(.4, 0);//drive in reverse over step
         	}
+    		RobotMap.driveTrain.drive(0, 0);
 		}
-    	else if(mode==3 && step==true)
+    	else if(mode==2 && step==false)
     	{//back up over step
-    		time = Timer.getFPGATimestamp();
-    		while(time+3.7>Timer.getFPGATimestamp())
+    		while(time+1<Timer.getFPGATimestamp() && time+6>Timer.getFPGATimestamp())
         	{
-        		RobotMap.driveTrain.drive(.3, 0);//drive in reverse over step
+        		RobotMap.driveTrain.drive(.25, 0);//drive in reverse over step
         	}
+    		RobotMap.driveTrain.drive(0, 0);
 		}
-    	else if(mode==4)
+
+    	else if(mode==3)
     	{//rotate to fit
     		time = Timer.getFPGATimestamp();
     		driveTrain.rotate();
-    		while(time+1.85>Timer.getFPGATimestamp())
-        	{
-        		RobotMap.driveTrain.drive(-.35, 0);
-        	}
-    	}
-    	else if(mode==5 && step==false)
-    	{//back to corner
-    		time = Timer.getFPGATimestamp();
-    		driveTrain.straight();
     		while(time+1.7>Timer.getFPGATimestamp())
         	{
-        		RobotMap.driveTrain.drive(.25, 0);
+        		RobotMap.driveTrain.drive(-.4, 0);
         	}
-    		RobotMap.driveTrain.drive(0, 0);
     	}
     	mode++;
     }

@@ -30,7 +30,7 @@ public class RobotMap
     public static Solenoid cylinderOpen, cylinderClose, suction, channelB;
     public static Relay relay;
     public static AnalogInput hall1;
-    public static AnalogInput sonic;
+    public static AnalogInput sonic, sonic2;
     public static double counter, time;
     public static Servo YAxis, XAxis;
     
@@ -60,7 +60,8 @@ public class RobotMap
     	suction = new Solenoid(3);
     	//solenoid2 = new Solenoid(1);
     	hall1 = new AnalogInput(1);
-    	sonic = new AnalogInput(2);   
+    	sonic = new AnalogInput(2);
+    	sonic2 = new AnalogInput(3);
     	hedgehog = new Ultrasonic(0, 1);
     	driveTrain.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, false);
     	driveTrain.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);

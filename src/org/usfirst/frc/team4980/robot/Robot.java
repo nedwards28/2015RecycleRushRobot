@@ -19,6 +19,7 @@ import org.usfirst.frc.team4980.robot.commands.Drive;
 import org.usfirst.frc.team4980.robot.commands.GatherContainer;
 import org.usfirst.frc.team4980.robot.commands.GetPositionFrontElevator;
 import org.usfirst.frc.team4980.robot.commands.GoBackOnePositionFrontElevator;
+import org.usfirst.frc.team4980.robot.commands.GrabTwoContainersAuto;
 import org.usfirst.frc.team4980.robot.commands.ToteThenTrash;
 import org.usfirst.frc.team4980.robot.commands.ServoUp;
 import org.usfirst.frc.team4980.robot.commands.ToteOnlyAuto;
@@ -26,10 +27,15 @@ import org.usfirst.frc.team4980.robot.commands.backElevatorReachDown;
 import org.usfirst.frc.team4980.robot.commands.backElevatorReachUp;
 import org.usfirst.frc.team4980.robot.commands.frontElevatorDown;
 import org.usfirst.frc.team4980.robot.commands.frontElevatorUp;
+import org.usfirst.frc.team4980.robot.commands.getContainerFromStep;
+import org.usfirst.frc.team4980.robot.subsystems.BackElevator;
+import org.usfirst.frc.team4980.robot.subsystems.BackElevatorReach;
 import org.usfirst.frc.team4980.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4980.robot.subsystems.CameraSubsystem;
 import org.usfirst.frc.team4980.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team4980.robot.subsystems.FrontElevator;
+import org.usfirst.frc.team4980.robot.subsystems.Claw;
+import org.usfirst.frc.team4980.robot.subsystems.vacuum;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -40,7 +46,7 @@ import org.usfirst.frc.team4980.robot.subsystems.FrontElevator;
  */
 public class Robot extends IterativeRobot {
 
-	Command autonomousCommand, drive;
+	public Command autonomousCommand, drive;
 	public static SendableChooser autoChooser, stepOrNah;
 	public static OI oi;
 	
@@ -48,9 +54,13 @@ public class Robot extends IterativeRobot {
 	public static DriveTrain driveTrain = new DriveTrain();
 	public static FrontElevator frontElevator = new FrontElevator();
 	public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
+	public static BackElevator backElevator = new BackElevator();
+	public static BackElevatorReach backElevatorReach = new BackElevatorReach();
+	public static Claw claw = new Claw();
+	public static vacuum vacuum = new vacuum();
 	public static int invert;
 	public static boolean clawState;
-	public static boolean button2;
+	//public static boolean button2;
 	public static Command button1 = null, button5 = null;
     
 
@@ -63,7 +73,7 @@ public class Robot extends IterativeRobot {
     	RobotMap.init();
     	invert = 1;
     	clawState = true;
-    	button2 = true;
+    	//button2 = true;
 		
     	//OI Must be constructed after subsytems. If the OI creates Commands
     	//(a likely scenario) subsystems are not guaranteed to be constructed yet.
@@ -74,8 +84,8 @@ public class Robot extends IterativeRobot {
         drive = new Drive();
         autoChooser = new SendableChooser();
         stepOrNah = new SendableChooser();
-        stepOrNah.addDefault("Step", true);
-        stepOrNah.addObject("No Step", false);
+        stepOrNah.addDefault("Scoring Platform", true);
+        stepOrNah.addObject("No Scoring Platform", false);
         
         
         autoChooser.addDefault("Nothing yet", new Auto());
@@ -83,6 +93,8 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject("Tote Only", new ToteOnlyAuto());
         autoChooser.addObject("Container Only", new ContainerOnlyAuto());
         autoChooser.addObject("All three Totes", new AllThreeTotesAuto());
+        autoChooser.addObject("Container from step", new getContainerFromStep());
+        autoChooser.addObject("Two Containers", new GrabTwoContainersAuto());
         
         SmartDashboard.putData("Chooser", autoChooser);
         SmartDashboard.putData("StepChooser", stepOrNah);
@@ -92,15 +104,15 @@ public class Robot extends IterativeRobot {
         {
         	//Once initialized, the getAngle() method of the Gyro object will return
         	//the number of degrees of rotation (heading) as a positive or negative number
-        	//relative to the robot’s position during the calibration period. 
+        	//relative to the robots position during the calibration period. 
         	//The zero heading can be reset at any time by calling the reset() method on the Gyro object.
         	RobotMap.gyro.initGyro();
         	
-        	//2014 Gyro ADW22307 can measure up to 250°/second of rotation. 
-        	//Nominal output is 2.5V at standstill, plus 7mV/°/second
-        	//Sensitivity = volts/°/sec therefore 7mV/°/sec would be set at 0.007V/°/sec
-        	RobotMap.gryo.setSensitivity(0.007);//0.001655
-        	RobotMap.gryo.reset();
+        	//2014 Gyro ADW22307 can measure up to 250/second of rotation. 
+        	//Nominal output is 2.5V at standstill, plus 7mV//second
+        	//Sensitivity = volts//sec therefore 7mV//sec would be set at 0.007V//sec
+        	RobotMap.gyro.setSensitivity(0.007);//0.001655
+        	RobotMap.gyro.reset();
         }
         
         RobotMap.driveTrain.drive(0, 0);
@@ -120,6 +132,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         // schedule the autonomous command (example)
      //   if (autonomousCommand != null) autonomousCommand.start();
+    	
     	autonomousCommand = (Command) autoChooser.getSelected();
     	autonomousCommand.start();   
     }
@@ -159,10 +172,21 @@ public class Robot extends IterativeRobot {
         drive.start();
         cameraSubsystem.getAngle();
         SmartDashboard.putNumber("Hall effect", RobotMap.hall1.getVoltage());
-       
+        Robot.backElevator.setSpeed(Robot.oi.xbox.getRawAxis(1));
+        Robot.backElevatorReach.setSpeed(Robot.oi.xbox.getRawAxis(5));
 		SmartDashboard.putNumber("Counter", RobotMap.counter);
-
-        
+		/*if(RobotMap.sonic2.getVoltage()<.3 && RobotMap.cylinderOpen.get()==true)
+		{
+			
+			RobotMap.cylinderOpen.set(false);
+    		RobotMap.cylinderClose.set(true);
+		}
+		if(RobotMap.sonic2.getVoltage()<.3)
+		{
+			
+			RobotMap.cylinderOpen.set(false);
+    		RobotMap.cylinderClose.set(true);
+		}*/
         if(invert==-1)	
         {
         	button5 = new backElevatorReachUp();
@@ -179,6 +203,7 @@ public class Robot extends IterativeRobot {
       //  SmartDashboard.putNumber("Axis", Robot.oi.stick.getPOV());
         SmartDashboard.putNumber("Gyro", RobotMap.gyro.getAngle());
         SmartDashboard.putNumber("Ultra", RobotMap.sonic.getVoltage());
+        SmartDashboard.putNumber("Back Ultra", RobotMap.sonic2.getVoltage());
     }	
     
     /**

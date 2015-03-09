@@ -1,14 +1,10 @@
 package org.usfirst.frc.team4980.robot.commands;
 
 import org.usfirst.frc.team4980.robot.RobotMap;
+import org.usfirst.frc.team4980.robot.subsystems.Claw;
 
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.usfirst.frc.team4980.robot.subsystems.CameraSubsystem;
-import org.usfirst.frc.team4980.robot.subsystems.Grabber;
 
 /**
  *
@@ -16,7 +12,6 @@ import org.usfirst.frc.team4980.robot.subsystems.Grabber;
 public class GetPositionFrontElevator extends Command {
 
 	public double time;
-	public static Grabber grabber = new Grabber();
     public GetPositionFrontElevator() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -50,7 +45,7 @@ public class GetPositionFrontElevator extends Command {
     		}
     		if(RobotMap.counter==3)
     		{
-    			RobotMap.frontElevator.set(-.5);
+    			RobotMap.frontElevator.set(-.4);
     		}
     		
     	}
@@ -63,8 +58,7 @@ public class GetPositionFrontElevator extends Command {
     			RobotMap.frontElevator.set(-.3);
     		if(RobotMap.counter==2)
     			RobotMap.frontElevator.set(-.4);
-    		if(RobotMap.counter==3)
-    			RobotMap.frontElevator.set(-.5);
+    		
     		
     	}
     }

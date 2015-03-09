@@ -25,6 +25,7 @@ public class ToteOnlyAuto extends Command {
     // Called just before this Command runs the first time
     protected void initialize() 
     {
+    	
     	mode = 0;
     	step =(boolean) Robot.stepOrNah.getSelected();
     }
@@ -32,7 +33,6 @@ public class ToteOnlyAuto extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
-    	
     	if(mode==0)
     	{
     		time = Timer.getFPGATimestamp();
@@ -65,11 +65,12 @@ public class ToteOnlyAuto extends Command {
     	{//rotate to fit
     		time = Timer.getFPGATimestamp();
     		driveTrain.rotate();
-    		while(time+1.48>Timer.getFPGATimestamp())
+    		while(time+1.7>Timer.getFPGATimestamp())
         	{
-        		RobotMap.driveTrain.drive(-.35, 0);
+        		RobotMap.driveTrain.drive(-.4, 0);
         	}
     	}
+    	/*
     	else if(mode==3 && step==false)
     	{//back to corner
     		time = Timer.getFPGATimestamp();
@@ -79,7 +80,7 @@ public class ToteOnlyAuto extends Command {
         		RobotMap.driveTrain.drive(-.25, 0);
         	}
     		RobotMap.driveTrain.drive(0, 0);
-    	}
+    	}*/
     	mode++;
     	
     }

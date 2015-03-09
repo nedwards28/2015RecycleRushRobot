@@ -20,6 +20,8 @@ import org.usfirst.frc.team4980.robot.commands.ClawOpen;
 import org.usfirst.frc.team4980.robot.commands.GetPositionFrontElevator;
 import org.usfirst.frc.team4980.robot.commands.InvertDrive;
 import org.usfirst.frc.team4980.robot.commands.chooseButton3;
+import org.usfirst.frc.team4980.robot.commands.strafeLeft;
+import org.usfirst.frc.team4980.robot.commands.strafeRight;
 
 
 
@@ -31,18 +33,18 @@ public class OI {
     
 	
 	
-	public Joystick stick, attack3;
+	public Joystick stick, attack3, xbox;
 	public JoystickButton button5;
 	public JoystickButton button3;
 	public JoystickButton button6;
 	public JoystickButton button4;
 	public JoystickButton setFrontElevatorPosition;
-	public JoystickButton backElevatorReachDown;
-	public JoystickButton backElevatorReachUp;
+	public JoystickButton button8;
+	public JoystickButton button7;
 	public JoystickButton button1;
 	public JoystickButton suction, invertDrive;
 	public JoystickButton button2;
-	public JoystickButton button12;
+	public JoystickButton button12, buttonA;
 	
 	
 	
@@ -50,7 +52,7 @@ public class OI {
     {
     	stick = new Joystick(0);
     	attack3 = new Joystick(1);
-    	
+    	xbox = new Joystick(2);
     	//forwardElevatorButton = new JoystickButton(stick, 1);
     	button5 = new JoystickButton(stick, 5);
     	button3 = new JoystickButton(stick, 3);
@@ -58,24 +60,26 @@ public class OI {
     	button4 = new JoystickButton(stick, 4);
     	button12 = new JoystickButton(stick, 12);
     	button2 = new JoystickButton(stick, 2);
+    	buttonA = new JoystickButton(xbox, 1);
     	//this.setFrontElevatorPosition = new JoystickButton(stick, 11);
-    	backElevatorReachDown = new JoystickButton(stick, 9);
-    	backElevatorReachUp = new JoystickButton(stick, 7);
+    	button8 = new JoystickButton(stick, 8);
+    	button7 = new JoystickButton(stick, 7);
     	button1 = new JoystickButton(stick, 1);
     	suction = new JoystickButton(stick, 10);
     	invertDrive = new JoystickButton(stick, 11);
     	button12.whenPressed(new GetPositionFrontElevator());
+    	buttonA.whenPressed(new ClawOpen());
     	
     	invertDrive.whenReleased(new InvertDrive());
     	
-    	button1.whenPressed(new chooseButton1());
+    	//button1.whenPressed(new chooseButton1());
     	button2.whenPressed(new chooseButton2());
     	button5.whileHeld(new chooseButton5());
     	button3.whileHeld(new chooseButton3());
-    	button6.whileHeld(new backElevatorUp());
-    	button4.whileHeld(new backElevatorDown());
-    	backElevatorReachDown.whileHeld(new backElevatorReachDown());
-    	backElevatorReachUp.whileHeld(new backElevatorReachUp());
+    	//button6.whileHeld(new backElevatorUp());
+    	//button4.whileHeld(new backElevatorDown());
+    	//button8.whileHeld(new strafeRight());
+    	//button7.whileHeld(new strafeLeft());
     	//this.setFrontElevatorPosition.whenReleased(new GetPositionFrontElevator());
     	
     	suction.whileHeld(new SuctionCupGrabber());

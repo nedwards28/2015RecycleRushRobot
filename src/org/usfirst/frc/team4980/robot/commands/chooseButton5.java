@@ -22,9 +22,9 @@ public class chooseButton5 extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	
-    	if(Robot.invert==1)
+    	//if(Robot.invert==1)
     		frontUp.start();
-    	if(Robot.invert==-1)
+    	//if(Robot.invert==-1)
     		backUp.start();
     }
 
@@ -36,11 +36,11 @@ public class chooseButton5 extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(Robot.invert==1)
-    		return frontUp.isFinished();
-    	if(Robot.invert==-1)
-    		return backUp.isFinished();
-        return false;
+    	//if(Robot.invert==1)
+		return frontUp.isFinished();
+    	//if(Robot.invert==-1)
+    	//	return backUp.isFinished();
+		
     }
 
     // Called once after isFinished returns true

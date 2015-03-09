@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class Grabber extends Subsystem {
+public class Claw extends Subsystem {
     
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -18,17 +18,17 @@ public class Grabber extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
      
     }
-    public void	grabber()
+    public void	clawOpen()
     {
-    	double time = Timer.getFPGATimestamp();
-    	while(time+1.5>Timer.getFPGATimestamp() )
-		{
-    		//RobotMap.cylinder.set(true);
-    		RobotMap.suction.set(true);
-		}
-    	//RobotMap.cylinder.set(false);
-    	RobotMap.time =Timer.getFPGATimestamp();
+    	RobotMap.cylinderOpen.set(true);
+    	RobotMap.cylinderClose.set(false);
     	
+    }
+    public void	clawClose()
+    {
+    	
+    	RobotMap.cylinderOpen.set(false);
+    	RobotMap.cylinderClose.set(true);
     }
 }
 

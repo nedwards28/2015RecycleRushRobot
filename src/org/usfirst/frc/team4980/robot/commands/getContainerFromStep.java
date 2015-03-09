@@ -3,10 +3,11 @@ package org.usfirst.frc.team4980.robot.commands;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
- *
+ leans 
  */
 public class getContainerFromStep extends CommandGroup {
     
+	
     public  getContainerFromStep() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
@@ -24,5 +25,9 @@ public class getContainerFromStep extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
+    	addSequential(new DriveToLandFillZone());
+    	addParallel(new BackGrabberLeanOut(3, .4));
+    	addSequential(new GrabGreenContainer(5, .6));
+    	addSequential(new GatherContainer());
     }
 }

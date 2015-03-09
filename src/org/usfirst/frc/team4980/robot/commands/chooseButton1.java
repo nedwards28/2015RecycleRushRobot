@@ -24,7 +24,7 @@ public class chooseButton1 extends Command {
     protected void initialize() {
     	if(Robot.invert==1)
     	{
-    		liftPosition.initialize();
+    		//liftPosition.initialize();
     		liftPosition.start();
     	}
     	if(Robot.invert==-1)
