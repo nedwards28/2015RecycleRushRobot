@@ -27,7 +27,7 @@ public class RobotMap
     public static Gyro gyro;
     public static Ultrasonic hedgehog;
     public static BuiltInAccelerometer accel;
-    public static Solenoid cylinderOpen, cylinderClose, suction, channelB;
+    public static Solenoid cylinderOpen, cylinderClose, suction, channelB, actuateOut, actuateIn;
     public static Relay relay;
     public static AnalogInput hall1;
     public static AnalogInput sonic, sonic2;
@@ -56,6 +56,8 @@ public class RobotMap
     	XAxis = new Servo(6);
     	cylinderOpen = new Solenoid(1);
     	cylinderClose = new Solenoid(2);
+    	actuateOut = new Solenoid(4);
+    	actuateIn = new Solenoid(5);
     	channelB = new Solenoid(0);
     	suction = new Solenoid(3);
     	//solenoid2 = new Solenoid(1);

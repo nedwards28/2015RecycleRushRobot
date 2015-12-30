@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team4980.robot.commands.AnalProbe;
+import org.usfirst.frc.team4980.robot.commands.ActuateSuction;
+import org.usfirst.frc.team4980.robot.commands.ActuateSuctionWhileHeld;
 import org.usfirst.frc.team4980.robot.commands.SuctionCupGrabber;
 import org.usfirst.frc.team4980.robot.commands.chooseButton1;
 import org.usfirst.frc.team4980.robot.commands.chooseButton2;
@@ -45,6 +46,7 @@ public class OI {
 	public JoystickButton suction, invertDrive;
 	public JoystickButton button2;
 	public JoystickButton button12, buttonA;
+	public JoystickButton rightBumper;
 	
 	
 	
@@ -61,10 +63,12 @@ public class OI {
     	button12 = new JoystickButton(stick, 12);
     	button2 = new JoystickButton(stick, 2);
     	buttonA = new JoystickButton(xbox, 1);
+    	rightBumper = new JoystickButton(xbox, 6);
     	//this.setFrontElevatorPosition = new JoystickButton(stick, 11);
     	button8 = new JoystickButton(stick, 8);
     	button7 = new JoystickButton(stick, 7);
     	button1 = new JoystickButton(stick, 1);
+    	
     	suction = new JoystickButton(stick, 10);
     	invertDrive = new JoystickButton(stick, 11);
     	button12.whenPressed(new GetPositionFrontElevator());
@@ -72,17 +76,24 @@ public class OI {
     	
     	invertDrive.whenReleased(new InvertDrive());
     	
-    	//button1.whenPressed(new chooseButton1());
-    	button2.whenPressed(new chooseButton2());
+    	button1.whileHeld(new ActuateSuction());
+    	//button2.whileHeld(new ActuateSuction());
     	button5.whileHeld(new chooseButton5());
     	button3.whileHeld(new chooseButton3());
-    	//button6.whileHeld(new backElevatorUp());
+    	//button6.whileHeld(new SuctionCupGrabber());
     	//button4.whileHeld(new backElevatorDown());
+    	
+    	
+    	//button4.whileHeld(new ActuateSuctionWhileHeld());
+    	rightBumper.whileHeld(new SuctionCupGrabber() );
+    	
+    	//button4.whenPressed(new ActuateSuction());
+    	
     	//button8.whileHeld(new strafeRight());
     	//button7.whileHeld(new strafeLeft());
     	//this.setFrontElevatorPosition.whenReleased(new GetPositionFrontElevator());
     	
-    	suction.whileHeld(new SuctionCupGrabber());
+    	//suction.whileHeld(new SuctionCupGrabber());
     	
     	
     	//SmartDashboard.putNumber("stick", stick.getAxisCount());

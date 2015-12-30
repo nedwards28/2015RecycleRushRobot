@@ -1,35 +1,36 @@
 package org.usfirst.frc.team4980.robot.commands;
 
+import org.usfirst.frc.team4980.robot.Robot;
 import org.usfirst.frc.team4980.robot.RobotMap;
-import org.usfirst.frc.team4980.robot.subsystems.DriveTrain;
 
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Auto extends Command {
-	DriveTrain driveTrain = new DriveTrain();
-	
-    public Auto() {
+public class ActuateSuction extends Command {
+
+    public ActuateSuction() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
-    public double time;
+
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
+    	time = Timer.getFPGATimestamp();
     	
     }
-
+    double time;
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    
-    	
-    	
+    	RobotMap.actuateOut.set(true);
+		RobotMap.actuateIn.set(false);
+		RobotMap.suction.set(true);
+    	RobotMap.channelB.set(false);
+	
+		
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -39,7 +40,10 @@ public class Auto extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    driveTrain.defaultDrive();
+    	RobotMap.actuateOut.set(false);
+		RobotMap.actuateIn.set(true);
+		RobotMap.suction.set(false);
+    	RobotMap.channelB.set(true);
     }
 
     // Called when another command which requires one or more of the same

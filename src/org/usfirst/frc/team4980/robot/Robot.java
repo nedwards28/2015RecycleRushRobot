@@ -14,12 +14,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4980.robot.commands.AllThreeTotesAuto;
 import org.usfirst.frc.team4980.robot.commands.Auto;
 import org.usfirst.frc.team4980.robot.commands.ClawOpen;
+import org.usfirst.frc.team4980.robot.commands.ContainerFromStepAuto;
 import org.usfirst.frc.team4980.robot.commands.ContainerOnlyAuto;
 import org.usfirst.frc.team4980.robot.commands.Drive;
 import org.usfirst.frc.team4980.robot.commands.GatherContainer;
 import org.usfirst.frc.team4980.robot.commands.GetPositionFrontElevator;
 import org.usfirst.frc.team4980.robot.commands.GoBackOnePositionFrontElevator;
 import org.usfirst.frc.team4980.robot.commands.GrabTwoContainersAuto;
+import org.usfirst.frc.team4980.robot.commands.GrayTotesAuto;
 import org.usfirst.frc.team4980.robot.commands.ToteThenTrash;
 import org.usfirst.frc.team4980.robot.commands.ServoUp;
 import org.usfirst.frc.team4980.robot.commands.ToteOnlyAuto;
@@ -59,7 +61,7 @@ public class Robot extends IterativeRobot {
 	public static Claw claw = new Claw();
 	public static vacuum vacuum = new vacuum();
 	public static int invert;
-	public static boolean clawState;
+	public static boolean clawState, actuateSuctionState;
 	//public static boolean button2;
 	public static Command button1 = null, button5 = null;
     
@@ -73,6 +75,7 @@ public class Robot extends IterativeRobot {
     	RobotMap.init();
     	invert = 1;
     	clawState = true;
+    	actuateSuctionState = true;
     	//button2 = true;
 		
     	//OI Must be constructed after subsytems. If the OI creates Commands
@@ -95,6 +98,8 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject("All three Totes", new AllThreeTotesAuto());
         autoChooser.addObject("Container from step", new getContainerFromStep());
         autoChooser.addObject("Two Containers", new GrabTwoContainersAuto());
+        autoChooser.addObject("Container from Step", new ContainerFromStepAuto());
+        autoChooser.addObject("Two Gray Totes", new GrayTotesAuto());
         
         SmartDashboard.putData("Chooser", autoChooser);
         SmartDashboard.putData("StepChooser", stepOrNah);
@@ -175,6 +180,11 @@ public class Robot extends IterativeRobot {
         Robot.backElevator.setSpeed(Robot.oi.xbox.getRawAxis(1));
         Robot.backElevatorReach.setSpeed(Robot.oi.xbox.getRawAxis(5));
 		SmartDashboard.putNumber("Counter", RobotMap.counter);
+		
+		
+		
+		
+		
 		/*if(RobotMap.sonic2.getVoltage()<.3 && RobotMap.cylinderOpen.get()==true)
 		{
 			
